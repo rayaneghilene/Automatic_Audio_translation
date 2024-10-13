@@ -1,315 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Upload</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-
-        .drop-area {
-            width: 400px;
-            height: 200px;
-            border: 2px dashed #007bff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #007bff;
-            text-align: center;
-            background-color: #ffffff;
-            cursor: pointer;
-        }
-
-        .drop-area.dragging {
-            background-color: #e0e0e0;
-            color: #333;
-        }
-
-        .status {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .file-preview {
-            margin-top: 10px;
-            color: #333;
-        }
-
-        .progress-bar {
-            margin-top: 10px;
-            width: 100%;
-            background-color: #f3f3f3;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-bar div {
-            height: 10px;
-            width: 0%;
-            background-color: #007bff;
-        }
-    </style>
-</head>
-<body>
-
-<div class="drop-area" id="drop-area">
-    Drag and drop an audio file here
-</div>
-
-<div class="status" id="status">Waiting for file...</div>
-<div class="file-preview" id="file-preview"></div>
-<div class="progress-bar" id="progress-bar">
-    <div></div>
-</div>
-
-<script>
-    const dropArea = document.getElementById("drop-area");
-    const status = document.getElementById("status");
-    const filePreview = document.getElementById("file-preview");
-    const progressBar = document.getElementById("progress-bar").querySelector("div");
-
-    dropArea.addEventListener("dragover", (event) => {
-        event.preventDefault();
-        dropArea.classList.add("dragging");
-    });
-
-    dropArea.addEventListener("dragleave", () => {
-        dropArea.classList.remove("dragging");
-    });
-
-    dropArea.addEventListener("drop", async (event) => {
-        event.preventDefault();
-        dropArea.classList.remove("dragging");
-
-        const file = event.dataTransfer.files[0];
-
-        if (!file) {
-            return;
-        }
-
-        filePreview.innerHTML = `Selected File: ${file.name}`;
-        status.innerText = "Uploading file...";
-
-        try {
-            // Send the file to the backend
-            const formData = new FormData();
-            formData.append("file", file);
-
-            const response = await fetch("/process-audio/", {
-                method: "POST",
-                body: formData,
-                headers: {
-                    // You can add custom headers if needed (e.g., authentication)
-                },
-                onUploadProgress: (progressEvent) => {
-                    const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    progressBar.style.width = `${percent}%`;
-                }
-            });
-
-            if (response.ok) {
-                status.innerText = "Processing complete. Downloading audio...";
-
-                // Once the response is received, download the audio file
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "output_audio.wav";  // Name of the audio file
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } else {
-                throw new Error("Error uploading file.");
-            }
-        } catch (error) {
-            status.innerText = `Failed to upload: ${error.message}`;
-        }
-    });
-</script>
-</body>
-</html> Version 2 -->  
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Translator</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            text-align: center;
-            width: 100%;
-            max-width: 600px;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .drop-area {
-            display: inline-block;
-            width: 80%;
-            max-width: 500px;
-            padding: 20px;
-            border-radius: 50px;
-            background: #ffffff;
-            border: 2px dashed #4CAF50;
-            color: #4CAF50;
-            font-size: 18px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .drop-area:hover {
-            background: #4CAF50;
-            color: #fff;
-            border-color: #fff;
-        }
-
-        .drop-area input {
-            display: none;
-        }
-
-        .drop-area p {
-            margin: 0;
-            padding: 0;
-            font-size: 1.2rem;
-        }
-
-        .success-message {
-            display: none;
-            font-size: 1.5rem;
-            margin-top: 20px;
-            color: green;
-            font-weight: bold;
-        }
-
-        .error-message {
-            display: none;
-            font-size: 1.5rem;
-            margin-top: 20px;
-            color: red;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>Upload Your Audio File</h1>
-    <div class="drop-area" id="dropArea">
-        <p>Drag and Drop a WAV File Here</p>
-        <input type="file" id="fileInput" accept=".wav">
-    </div>
-    <div class="success-message" id="successMessage">File uploaded and processed successfully!</div>
-    <div class="error-message" id="errorMessage">Error occurred while processing the file.</div>
-</div>
-
-<script>
-    const dropArea = document.getElementById("dropArea");
-    const fileInput = document.getElementById("fileInput");
-    const successMessage = document.getElementById("successMessage");
-    const errorMessage = document.getElementById("errorMessage");
-
-    // Open file dialog when the drop area is clicked
-    dropArea.addEventListener("click", () => {
-        fileInput.click();
-    });
-
-    // Handle file drop
-    dropArea.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        dropArea.style.backgroundColor = "#e7f7e7";
-    });
-
-    dropArea.addEventListener("dragleave", () => {
-        dropArea.style.backgroundColor = "white";
-    });
-
-    dropArea.addEventListener("drop", async (e) => {
-        e.preventDefault();
-        dropArea.style.backgroundColor = "white";
-        
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            const file = files[0];
-            // if (file.type === "wav") {
-            await uploadFile(file);
-            // } else {
-                // alert("Please upload a valid WAV file.");
-            // }
-        }
-    });
-
-    // Handle file input change
-    fileInput.addEventListener("change", async () => {
-        const file = fileInput.files[0];
-        if (file && file.type === "audio/wav") {
-            await uploadFile(file);
-        } else {
-            alert("Please upload a valid WAV file.");
-        }
-    });
-
-    // Upload file to the server
-    async function uploadFile(file) {
-        successMessage.style.display = "none";
-        errorMessage.style.display = "none";
-
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            const response = await fetch("/process-audio/", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (response.ok) {
-                successMessage.style.display = "block";
-                const blob = await response.blob();
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "translated_audio.wav";
-                a.click();
-            } else {
-                throw new Error("Failed to process file");
-            }
-        } catch (error) {
-            errorMessage.style.display = "block";
-        }
-    }
-</script>
-
-</body>
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -348,8 +36,8 @@
             padding: 20px;
             border-radius: 50px;
             background: #ffffff;
-            border: 2px dashed #4CAF50;
-            color: #4CAF50;
+            border: 2px dashed #000000;
+            color: #000000;
             font-size: 18px;
             font-weight: bold;
             transition: all 0.3s ease;
@@ -360,11 +48,11 @@
         }
 
         .drop-area:focus {
-            outline: 2px solid #4CAF50;
+            outline: 2px solid #000000;
         }
 
         .drop-area:hover {
-            background: #4CAF50;
+            background: #000000;
             color: #fff;
             border-color: #fff;
         }
@@ -397,6 +85,27 @@
             border: 2px solid black;
             color: black;
         }
+        .drop-area.processing {
+            animation: growShrink 0.6s ease infinite; /* Infinite animation for processing */
+        }
+        /* Text and Three Dots Animation */
+        @keyframes dotBlink {
+            0%, 100% { content: "Processing"; }
+            25% { content: "Processing."; }
+            50% { content: "Processing.."; }
+            75% { content: "Processing..."; }
+        }
+
+        .processing-indicator {
+            font-size: 1.2rem;
+            color: #333;
+            display: none;
+        }
+
+        .dots:after {
+            content: "Processing...";
+            animation: dotBlink 1.5s infinite;
+        }
 
         .success-message {
             display: none;
@@ -423,6 +132,8 @@
         <p>Drag and Drop a WAV File Here</p>
         <input type="file" id="fileInput" accept=".wav">
     </div>
+    <!-- Processing indicator -->
+    <div class="processing-indicator dots" id="processingIndicator"></div>
     <div class="success-message" id="successMessage">File uploaded and processed successfully!</div>
     <div class="error-message" id="errorMessage">Error occurred while processing the file.</div>
 </div>
@@ -432,6 +143,7 @@
     const fileInput = document.getElementById("fileInput");
     const successMessage = document.getElementById("successMessage");
     const errorMessage = document.getElementById("errorMessage");
+    const processingIndicator = document.getElementById("processingIndicator");
 
     // Open file dialog when the drop area is clicked
     dropArea.addEventListener("click", () => {
@@ -455,24 +167,51 @@
         const files = e.dataTransfer.files;
         if (files.length > 0) {
             const file = files[0];
-            // if (file.type === "audio/wav") {
             await uploadFile(file);
-            // } else {
-                // alert("Please upload a valid WAV file.");
-            // }
         }
     });
 
     // Handle file input change
     fileInput.addEventListener("change", async () => {
         const file = fileInput.files[0];
-        if (file && file.type === "audio/wav") {
-            await uploadFile(file);
-        } else {
-            alert("Please upload a valid WAV file.");
-        }
+        await uploadFile(file);
     });
 
+    // // Upload file to the server
+    // async function uploadFile(file) {
+    //     successMessage.style.display = "none";
+    //     errorMessage.style.display = "none";
+    //     processingIndicator.style.display = "block";  // Show the processing indicator
+
+    //     const formData = new FormData();
+    //     formData.append("file", file);
+
+    //     // Add animation to the drop-area
+    //     dropArea.classList.add("file-added");
+
+    //     try {
+    //         const response = await fetch("/process-audio/", {
+    //             method: "POST",
+    //             body: formData,
+    //         });
+
+    //         if (response.ok) {
+    //             successMessage.style.display = "block";
+    //             const blob = await response.blob();
+    //             const url = URL.createObjectURL(blob);
+    //             const a = document.createElement("a");
+    //             a.href = url;
+    //             a.download = "translated_audio.wav";
+    //             a.click();
+    //         } else {
+    //             throw new Error("Failed to process file");
+    //         }
+    //     } catch (error) {
+    //         errorMessage.style.display = "block";
+    //     } finally {
+    //         processingIndicator.style.display = "none";  // Hide the processing indicator after done
+    //     }
+    // }
     // Upload file to the server
     async function uploadFile(file) {
         successMessage.style.display = "none";
@@ -480,6 +219,10 @@
 
         const formData = new FormData();
         formData.append("file", file);
+
+        // Change the drop-area text to "Processing..."
+        const dropText = dropArea.querySelector("p");
+        dropText.textContent = "Processing...";
 
         // Add animation to the drop-area
         dropArea.classList.add("file-added");
@@ -503,8 +246,52 @@
             }
         } catch (error) {
             errorMessage.style.display = "block";
+        } finally {
+            // Revert the text back to original after processing
+            dropText.textContent = "Drag and Drop a WAV File Here";
+            dropArea.classList.remove("file-added");
         }
     }
+    // Upload file to the server
+    // async function uploadFile(file) {
+    //     successMessage.style.display = "none";
+    //     errorMessage.style.display = "none";
+
+    //     const formData = new FormData();
+    //     formData.append("file", file);
+
+    //     // Change the drop-area text to "Processing..."
+    //     const dropText = dropArea.querySelector("p");
+    //     dropText.textContent = "Processing...";
+
+    //     // Add the bounce animation for processing
+    //     dropArea.classList.add("file-added", "processing");
+
+    //     try {
+    //         const response = await fetch("/process-audio/", {
+    //             method: "POST",
+    //             body: formData,
+    //         });
+
+    //         if (response.ok) {
+    //             successMessage.style.display = "block";
+    //             const blob = await response.blob();
+    //             const url = URL.createObjectURL(blob);
+    //             const a = document.createElement("a");
+    //             a.href = url;
+    //             a.download = "translated_audio.wav";
+    //             a.click();
+    //         } else {
+    //             throw new Error("Failed to process file");
+    //         }
+    //     } catch (error) {
+    //         errorMessage.style.display = "block";
+    //     } finally {
+    //         // Revert the text back to original and stop the animation after processing
+    //         dropText.textContent = "Drag and Drop a WAV File Here";
+    //         dropArea.classList.remove("file-added", "processing");
+    //     }
+    // }
 </script>
 
 </body>
