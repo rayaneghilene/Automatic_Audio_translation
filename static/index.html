@@ -111,7 +111,7 @@
             display: none;
             font-size: 1.5rem;
             margin-top: 20px;
-            color: green;
+            color: rgb(108, 181, 223);
             font-weight: bold;
         }
 
@@ -176,42 +176,6 @@
         const file = fileInput.files[0];
         await uploadFile(file);
     });
-
-    // // Upload file to the server
-    // async function uploadFile(file) {
-    //     successMessage.style.display = "none";
-    //     errorMessage.style.display = "none";
-    //     processingIndicator.style.display = "block";  // Show the processing indicator
-
-    //     const formData = new FormData();
-    //     formData.append("file", file);
-
-    //     // Add animation to the drop-area
-    //     dropArea.classList.add("file-added");
-
-    //     try {
-    //         const response = await fetch("/process-audio/", {
-    //             method: "POST",
-    //             body: formData,
-    //         });
-
-    //         if (response.ok) {
-    //             successMessage.style.display = "block";
-    //             const blob = await response.blob();
-    //             const url = URL.createObjectURL(blob);
-    //             const a = document.createElement("a");
-    //             a.href = url;
-    //             a.download = "translated_audio.wav";
-    //             a.click();
-    //         } else {
-    //             throw new Error("Failed to process file");
-    //         }
-    //     } catch (error) {
-    //         errorMessage.style.display = "block";
-    //     } finally {
-    //         processingIndicator.style.display = "none";  // Hide the processing indicator after done
-    //     }
-    // }
     // Upload file to the server
     async function uploadFile(file) {
         successMessage.style.display = "none";
@@ -252,46 +216,6 @@
             dropArea.classList.remove("file-added");
         }
     }
-    // Upload file to the server
-    // async function uploadFile(file) {
-    //     successMessage.style.display = "none";
-    //     errorMessage.style.display = "none";
-
-    //     const formData = new FormData();
-    //     formData.append("file", file);
-
-    //     // Change the drop-area text to "Processing..."
-    //     const dropText = dropArea.querySelector("p");
-    //     dropText.textContent = "Processing...";
-
-    //     // Add the bounce animation for processing
-    //     dropArea.classList.add("file-added", "processing");
-
-    //     try {
-    //         const response = await fetch("/process-audio/", {
-    //             method: "POST",
-    //             body: formData,
-    //         });
-
-    //         if (response.ok) {
-    //             successMessage.style.display = "block";
-    //             const blob = await response.blob();
-    //             const url = URL.createObjectURL(blob);
-    //             const a = document.createElement("a");
-    //             a.href = url;
-    //             a.download = "translated_audio.wav";
-    //             a.click();
-    //         } else {
-    //             throw new Error("Failed to process file");
-    //         }
-    //     } catch (error) {
-    //         errorMessage.style.display = "block";
-    //     } finally {
-    //         // Revert the text back to original and stop the animation after processing
-    //         dropText.textContent = "Drag and Drop a WAV File Here";
-    //         dropArea.classList.remove("file-added", "processing");
-    //     }
-    // }
 </script>
 
 </body>
