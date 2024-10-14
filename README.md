@@ -1,4 +1,4 @@
-# Audio2Audio_translation
+# Automatic Audio translation
 
 This repository contains the code for the automatic audio2audio translation. We use whisper for transcription, BART for translation, and speechTT5 for audio playback generation. 
 
