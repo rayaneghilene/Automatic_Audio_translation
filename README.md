@@ -11,7 +11,7 @@ This is an early version of the code, a html/css UI, and fastAPI is provided wit
 
 Clone the repo using the following command:
 ```ruby
-git clone https://github.com/rayaneghilene/Audio2Audio_translation.git
+git clone https://github.com/rayaneghilene/Automatic_Audio_translation.git
 cd Audio2Audio_translation
 ```
 
