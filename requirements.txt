@@ -1,4 +1,4 @@
-"fastapi[standard]"
+fastapi[standard]
 datasets
 git+https://github.com/openai/whisper.git
 transformers
