@@ -13,11 +13,16 @@ from io import BytesIO
 
 app = FastAPI()
 
+# Ignore SSL certificate errors (for loading models) Just for testing purposes
+## Comment the following 2 lines in production
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
 # Serve static files (the HTML page)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Load models (same as before)
-whisper_model = whisper.load_model("turbo")
+whisper_model = whisper.load_model("small")
 mbart_model_name = 'facebook/mbart-large-50-many-to-many-mmt'
 mbart_model = MBartForConditionalGeneration.from_pretrained(mbart_model_name)
 mbart_tokenizer = MBart50TokenizerFast.from_pretrained(mbart_model_name)
